@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { siteConfig } from "@/config";
 import { generateLocalBusinessSchema } from "@/lib/schema";
@@ -71,26 +72,25 @@ export default function RootLayout({
         {siteConfig.callRailSnippet && (
           <script async src={siteConfig.callRailSnippet} />
         )}
-        {siteConfig.googleAnalyticsId && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${siteConfig.googleAnalyticsId}');
-                `,
-              }}
-            />
-          </>
-        )}
       </head>
       <body>
+        {siteConfig.googleAnalyticsId && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}
+            />
+            <Script
+              id="gtag-init"
+              strategy="afterInteractive"
+            >{`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${siteConfig.googleAnalyticsId}');
+            `}</Script>
+          </>
+        )}
         <Header />
         <main>{children}</main>
         <Footer />

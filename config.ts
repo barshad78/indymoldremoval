@@ -295,7 +295,7 @@ export const siteConfig = {
 
   // Google Analytics 4 — paste measurement ID when ready
   // e.g. "G-XXXXXXXXXX"
-  googleAnalyticsId: null as string | null,
+  googleAnalyticsId: "G-NJ5DDTVT2T",
 
   // Formspree endpoint for contact form
   // Sign up at formspree.io, create a form, paste the endpoint here
