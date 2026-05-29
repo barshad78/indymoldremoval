@@ -1,58 +1,207 @@
-import Link from "next/link";
+"use client";
+
+import { useState, FormEvent } from "react";
 import { siteConfig } from "@/config";
 
 export default function Hero() {
   return (
     <section className="bg-brand-navy text-white py-14 sm:py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="max-w-3xl">
-          <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight mb-4">
-            {siteConfig.heroHeading}
-          </h1>
-          <p className="text-gray-300 text-lg sm:text-xl mb-8 leading-relaxed">
-            {siteConfig.heroSubheading}
-          </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-10">
+          {/* Left column — headline, CTAs, trust signals */}
+          <div>
+            <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight mb-4">
+              {siteConfig.heroHeading}
+            </h1>
+            <p className="text-gray-300 text-lg sm:text-xl mb-8 leading-relaxed">
+              {siteConfig.heroSubheading}
+            </p>
+
+            {/* Phone CTA */}
             <a
               href={`tel:${siteConfig.phone}`}
-              className="inline-flex items-center justify-center gap-2 bg-brand-green hover:bg-brand-green-dark text-white font-bold text-lg px-8 py-4 rounded-xl transition-colors shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-green focus-visible:ring-offset-brand-navy"
+              className="inline-flex items-center justify-center gap-2 bg-brand-green hover:bg-brand-green-dark text-white font-bold text-lg px-8 py-4 rounded-xl transition-colors shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-green focus-visible:ring-offset-brand-navy mb-4"
             >
               <PhoneIcon />
               {siteConfig.heroCtaText}
             </a>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white font-semibold text-lg px-8 py-4 rounded-xl border border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              Send Us a Message
-            </Link>
+
+            {/* Large phone number display */}
+            <div className="mb-8">
+              <a
+                href={`tel:${siteConfig.phone}`}
+                className="inline-flex items-center gap-2 text-brand-green-light hover:text-white text-2xl font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded"
+              >
+                <PhoneIcon className="w-6 h-6" />
+                {siteConfig.phoneDisplay}
+              </a>
+            </div>
+
+            {/* Trust signals — shown below form on mobile, here on desktop */}
+            <div className="hidden lg:block pt-8 border-t border-white/10">
+              <TrustSignals />
+            </div>
           </div>
 
-          {/* Phone number large display */}
-          <a
-            href={`tel:${siteConfig.phone}`}
-            className="inline-flex items-center gap-2 text-brand-green-light hover:text-white text-2xl font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded"
-          >
-            <PhoneIcon className="w-6 h-6" />
-            {siteConfig.phoneDisplay}
-          </a>
+          {/* Right column — inline lead form */}
+          <div>
+            <HeroForm />
+          </div>
+
         </div>
 
-        {/* Trust signals bar */}
-        <div className="mt-10 pt-8 border-t border-white/10">
-          <ul className="flex flex-wrap gap-x-6 gap-y-3">
-            {siteConfig.trustSignals.map((signal) => (
-              <li key={signal} className="flex items-center gap-2 text-sm text-gray-300">
-                <CheckIcon />
-                {signal}
-              </li>
-            ))}
-          </ul>
+        {/* Trust signals — mobile only, below both columns */}
+        <div className="lg:hidden mt-10 pt-8 border-t border-white/10">
+          <TrustSignals />
         </div>
       </div>
     </section>
+  );
+}
+
+function TrustSignals() {
+  return (
+    <ul className="flex flex-wrap gap-x-6 gap-y-3">
+      {siteConfig.trustSignals.map((signal) => (
+        <li key={signal} className="flex items-center gap-2 text-sm text-gray-300">
+          <CheckIcon />
+          {signal}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function HeroForm() {
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (!siteConfig.formspreeEndpoint) {
+      setStatus("success");
+      return;
+    }
+
+    setStatus("submitting");
+    const data = new FormData(e.currentTarget);
+
+    try {
+      const res = await fetch(siteConfig.formspreeEndpoint, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      setStatus(res.ok ? "success" : "error");
+      if (res.ok) e.currentTarget.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+      {status === "success" ? (
+        <div className="text-center py-6">
+          <div className="w-14 h-14 bg-brand-green rounded-full flex items-center justify-center mx-auto mb-4">
+            <SuccessCheckIcon />
+          </div>
+          <h3 className="font-display font-bold text-brand-navy text-xl mb-2">
+            Thanks! We&apos;ll Call You Back Shortly.
+          </h3>
+          <p className="text-gray-500 text-sm">
+            For faster service, call us directly at{" "}
+            <a
+              href={`tel:${siteConfig.phone}`}
+              className="font-semibold text-brand-green hover:underline"
+            >
+              {siteConfig.phoneDisplay}
+            </a>
+          </p>
+        </div>
+      ) : (
+        <>
+          <h2 className="font-display font-bold text-brand-navy text-xl mb-5">
+            Get a Free Estimate
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label
+                htmlFor="hero-name"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                First Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="hero-name"
+                name="name"
+                type="text"
+                required
+                autoComplete="given-name"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent transition text-sm"
+                placeholder="Your first name"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="hero-phone"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="hero-phone"
+                name="phone"
+                type="tel"
+                required
+                autoComplete="tel"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent transition text-sm"
+                placeholder={siteConfig.phoneDisplay}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="hero-description"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Brief Description{" "}
+                <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <textarea
+                id="hero-description"
+                name="description"
+                rows={3}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent transition resize-none text-sm"
+                placeholder="Tell us about your mold situation..."
+              />
+            </div>
+
+            {status === "error" && (
+              <p className="text-red-600 text-sm">
+                Something went wrong. Please call us at{" "}
+                <a
+                  href={`tel:${siteConfig.phone}`}
+                  className="font-semibold underline"
+                >
+                  {siteConfig.phoneDisplay}
+                </a>
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={status === "submitting"}
+              className="w-full bg-brand-green hover:bg-brand-green-dark disabled:opacity-60 text-white font-bold py-4 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-green text-sm"
+            >
+              {status === "submitting" ? "Sending..." : "Request Free Estimate"}
+            </button>
+          </form>
+        </>
+      )}
+    </div>
   );
 }
 
@@ -68,6 +217,14 @@ function CheckIcon() {
   return (
     <svg className="w-4 h-4 text-brand-green flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
+function SuccessCheckIcon() {
+  return (
+    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
     </svg>
   );
 }
