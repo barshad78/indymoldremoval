@@ -29,8 +29,8 @@ export const siteConfig = {
   // ─── Business Identity ───────────────────────────────────
   businessName: "Indy Mold Removal Pros",
   tagline: "Fast, Safe Mold Remediation in Indianapolis & Surrounding Areas",
-  phone: "317-555-0000",           // Replace with CallRail tracking number
-  phoneDisplay: "(317) 555-0000",  // Formatted for display
+  phone: "317-721-7571",           // Replace with CallRail tracking number
+  phoneDisplay: "(317) 721-7571",  // Formatted for display
   email: "info@indymoldremoval.com",
   city: "Indianapolis",
   state: "Indiana",
@@ -43,7 +43,7 @@ export const siteConfig = {
   primaryKeyword: "mold removal Indianapolis",
   metaTitle: "Mold Removal Indianapolis IN | Free Estimates | Indy Mold Pros",
   metaDescription:
-    "Professional mold removal and remediation in Indianapolis, IN. Fast response, licensed technicians, free estimates. Call (317) 555-0000 today.",
+    "Professional mold removal and remediation in Indianapolis, IN. Fast response, licensed technicians, free estimates. Call (317) 721-7571 today.",
   ogImage: "/images/og-image.jpg",
 
   // ─── Homepage Hero ────────────────────────────────────────

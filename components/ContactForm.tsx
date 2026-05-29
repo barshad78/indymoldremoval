@@ -83,7 +83,7 @@ export default function ContactForm() {
           required
           autoComplete="tel"
           className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-transparent transition"
-          placeholder="(317) 555-0000"
+          placeholder="(317) 721-7571"
         />
       </div>
 
