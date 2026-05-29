@@ -300,7 +300,7 @@ export const siteConfig = {
   // Formspree endpoint for contact form
   // Sign up at formspree.io, create a form, paste the endpoint here
   // e.g. "https://formspree.io/f/XXXXXXXX"
-  formspreeEndpoint: null as string | null,
+  formspreeEndpoint: "https://formspree.io/f/mykvvwey",
 }
 
 export type SiteConfig = typeof siteConfig
