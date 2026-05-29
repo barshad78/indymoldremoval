@@ -12,6 +12,8 @@ export interface Service {
   fullDescription: string
   process: { step: string; description: string }[]
   urgencyNote?: string
+  imageSrc?: string
+  imageAlt?: string
 }
 
 export interface FAQ {
@@ -114,6 +116,8 @@ export const siteConfig = {
             "Surfaces are treated with antimicrobial agents and air scrubbers are used to capture airborne spores. We verify clearance before completing the job.",
         },
       ],
+      imageSrc: "/images/mold-remediation.jpg",
+      imageAlt: "Mold remediation technician containing and removing mold in Indianapolis home",
     },
     {
       slug: "black-mold-removal",
@@ -141,6 +145,8 @@ export const siteConfig = {
       ],
       urgencyNote:
         "Black mold exposure can cause serious health issues. If you suspect black mold, call us immediately — do not disturb it.",
+      imageSrc: "/images/black-mold-removal.jpg",
+      imageAlt: "Black mold removal specialist in full PPE treating contaminated wall",
     },
     {
       slug: "water-damage-mold",

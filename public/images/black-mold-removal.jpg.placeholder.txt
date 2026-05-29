@@ -1,0 +1,3 @@
+Replace this file with a real image at 1200x800px (JPG or WebP).
+Drop the image in /public/images/ with this exact filename.
+Recommended sources: unsplash.com or pexels.com (search: mold remediation)

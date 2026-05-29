@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig, Service } from "@/config";
 
 interface ServiceBlockProps {
@@ -22,17 +23,29 @@ export default function ServiceBlock({ slugs }: ServiceBlockProps) {
 function ServiceItem({ service, reversed }: { service: Service; reversed: boolean }) {
   return (
     <div className={`flex flex-col ${reversed ? "lg:flex-row-reverse" : "lg:flex-row"} gap-8 lg:gap-12 items-center`}>
-      {/* Image placeholder */}
+      {/* Image */}
       <div className="w-full lg:w-1/2 flex-shrink-0">
-        <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-brand-teal to-brand-green aspect-[4/3] flex items-center justify-center">
-          <div className="text-center text-white p-8">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ServiceIcon />
-            </div>
-            <p className="font-display font-bold text-xl">{service.name}</p>
-            <p className="text-white/80 text-sm mt-2">Indianapolis, IN</p>
+        {service.imageSrc ? (
+          <div className="rounded-2xl overflow-hidden aspect-[4/3] relative">
+            <Image
+              src={service.imageSrc}
+              alt={service.imageAlt ?? service.name}
+              width={1200}
+              height={800}
+              className="w-full h-full object-cover"
+            />
           </div>
-        </div>
+        ) : (
+          <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-brand-teal to-brand-green aspect-[4/3] flex items-center justify-center">
+            <div className="text-center text-white p-8">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ServiceIcon />
+              </div>
+              <p className="font-display font-bold text-xl">{service.name}</p>
+              <p className="text-white/80 text-sm mt-2">Indianapolis, IN</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Content */}
