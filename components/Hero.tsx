@@ -85,16 +85,24 @@ function HeroForm() {
     }
 
     setStatus("submitting");
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
 
     try {
       const res = await fetch(siteConfig.formspreeEndpoint, {
         method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
       });
-      setStatus(res.ok ? "success" : "error");
-      if (res.ok) e.currentTarget.reset();
+      if (res.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }
@@ -108,10 +116,10 @@ function HeroForm() {
             <SuccessCheckIcon />
           </div>
           <h3 className="font-display font-bold text-brand-navy text-xl mb-2">
-            Thanks! We&apos;ll Call You Back Shortly.
+            We got your message!
           </h3>
           <p className="text-gray-500 text-sm">
-            For faster service, call us directly at{" "}
+            Someone will be in touch with you shortly. For urgent needs, call us directly at{" "}
             <a
               href={`tel:${siteConfig.phone}`}
               className="font-semibold text-brand-green hover:underline"
@@ -181,7 +189,7 @@ function HeroForm() {
 
             {status === "error" && (
               <p className="text-red-600 text-sm">
-                Something went wrong. Please call us at{" "}
+                Something went wrong. Please try again or call us directly at{" "}
                 <a
                   href={`tel:${siteConfig.phone}`}
                   className="font-semibold underline"

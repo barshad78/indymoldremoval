@@ -16,13 +16,16 @@ export default function ContactForm() {
 
     setStatus("submitting");
     const form = e.currentTarget;
-    const data = new FormData(form);
+    const data = Object.fromEntries(new FormData(form));
 
     try {
       const res = await fetch(siteConfig.formspreeEndpoint, {
         method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
       });
 
       if (res.ok) {
@@ -43,10 +46,10 @@ export default function ContactForm() {
           <CheckIcon />
         </div>
         <h3 className="font-display font-bold text-brand-navy text-xl mb-2">
-          Thanks! We&apos;ll Call You Back Shortly.
+          We got your message!
         </h3>
         <p className="text-gray-600">
-          We typically respond within a few hours. For faster service, call us directly at{" "}
+          Someone will be in touch with you shortly. For urgent needs, call us directly at{" "}
           <a href={`tel:${siteConfig.phone}`} className="font-semibold text-brand-green hover:underline">
             {siteConfig.phoneDisplay}
           </a>
@@ -102,7 +105,7 @@ export default function ContactForm() {
 
       {status === "error" && (
         <p className="text-red-600 text-sm">
-          Something went wrong. Please try again or call us at{" "}
+          Something went wrong. Please try again or call us directly at{" "}
           <a href={`tel:${siteConfig.phone}`} className="font-semibold underline">
             {siteConfig.phoneDisplay}
           </a>
